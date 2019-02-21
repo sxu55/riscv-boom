@@ -287,11 +287,12 @@ class ICacheModule(outer: ICache) extends ICacheBaseModule(outer)
     else (nSets * refillCycles)
   val dataArraysB0 = Seq.fill(nWays) { SyncReadMem(ramDepth, UInt(dECC.width(wordBits/nBanks).W)) }
   val dataArraysB1 = Seq.fill(nWays) { SyncReadMem(ramDepth, UInt(dECC.width(wordBits/nBanks).W)) }
+  val dataArrays   = Seq.fill(nWays) { SyncReadMem(nSets * refillCycles, UInt(dECC.width(wordBits).W)) }
 
   if (cacheParams.fetchBytes <= 8)
   {
     // Use unbanked icache for narrow accesses.
-    val dataArrays = Seq.fill(nWays) { SyncReadMem(nSets * refillCycles, UInt(dECC.width(wordBits).W)) }
+
     s1_bankId := 0.U
     for ((dataArray, i) <- dataArrays zipWithIndex)
     {
